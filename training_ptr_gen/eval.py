@@ -1,8 +1,12 @@
 from __future__ import unicode_literals, print_function, division
 
-import os
+import os,sys,inspect
+sys.path.insert(0,'..')
+current_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+parent_dir = os.path.dirname(current_dir)
+sys.path.insert(0, parent_dir)
+
 import time
-import sys
 
 import tensorflow as tf
 import torch

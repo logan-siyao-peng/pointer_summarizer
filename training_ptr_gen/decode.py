@@ -1,13 +1,17 @@
 #Except for the pytorch part content of this file is copied from https://github.com/abisee/pointer-generator/blob/master/
 
+import os,sys,inspect
+sys.path.insert(0,'..')
+current_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+parent_dir = os.path.dirname(current_dir)
+sys.path.insert(0, parent_dir)
+
 from __future__ import unicode_literals, print_function, division
 
-import sys
 
 reload(sys)
 sys.setdefaultencoding('utf8')
 
-import os
 import time
 
 import torch

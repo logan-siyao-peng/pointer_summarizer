@@ -1,6 +1,11 @@
 from __future__ import unicode_literals, print_function, division
 
-import os
+import os,sys,inspect
+sys.path.insert(0,'..')
+current_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+parent_dir = os.path.dirname(current_dir)
+sys.path.insert(0, parent_dir)
+
 import time
 import argparse
 
@@ -18,6 +23,8 @@ from data_util.utils import calc_running_avg_loss
 from train_util import get_input_from_batch, get_output_from_batch
 
 use_cuda = config.use_gpu and torch.cuda.is_available()
+torch.cuda.set_device(7) 
+print("Use cuda: ", use_cuda)
 
 class Train(object):
     def __init__(self):
@@ -25,6 +32,8 @@ class Train(object):
         self.batcher = Batcher(config.train_data_path, self.vocab, mode='train',
                                batch_size=config.batch_size, single_pass=False)
         time.sleep(15)
+        print('Done sleeping for 15 secs. Just woke up!')
+
 
         train_dir = os.path.join(config.log_root, 'train_%d' % (int(time.time())))
         if not os.path.exists(train_dir):
@@ -129,7 +138,7 @@ class Train(object):
 
             if iter % 100 == 0:
                 self.summary_writer.flush()
-            print_interval = 1000
+            print_interval = 100 # 1000
             if iter % print_interval == 0:
                 print('steps %d, seconds for %d batch: %.2f , loss: %f' % (iter, print_interval,
                                                                            time.time() - start, loss))
