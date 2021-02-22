@@ -10,11 +10,11 @@ root_dir = os.path.expanduser("~")
 # log_root = os.path.join(root_dir, "ptr_nw/log")
 
 
-train_data_path ="../finished_files/chunked/train_*"
-eval_data_path = "../finished_files/val.bin"
-decode_data_path = "../finished_files/test.bin"
-vocab_path =  "../finished_files/vocab"
-log_root = "log"
+train_data_path ="../../finished_files/chunked/train_*"
+eval_data_path = "../../finished_files/val.bin"
+decode_data_path = "../../finished_files/test.bin"
+vocab_path =  "../../finished_files/vocab"
+log_root = "../log"
 
 
 # Hyperparameters
@@ -34,7 +34,7 @@ trunc_norm_init_std=1e-4
 max_grad_norm=2.0
 
 pointer_gen = True
-is_coverage = False
+is_coverage = True
 cov_loss_wt = 1.0
 
 eps = 1e-12

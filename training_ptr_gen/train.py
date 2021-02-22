@@ -23,7 +23,8 @@ from data_util.utils import calc_running_avg_loss
 from train_util import get_input_from_batch, get_output_from_batch
 
 use_cuda = config.use_gpu and torch.cuda.is_available()
-torch.cuda.set_device(7) 
+if use_cuda:
+    torch.cuda.set_device(5)
 print("Use cuda: ", use_cuda)
 
 class Train(object):
@@ -31,8 +32,8 @@ class Train(object):
         self.vocab = Vocab(config.vocab_path, config.vocab_size)
         self.batcher = Batcher(config.train_data_path, self.vocab, mode='train',
                                batch_size=config.batch_size, single_pass=False)
-        time.sleep(15)
-        print('Done sleeping for 15 secs. Just woke up!')
+        # time.sleep(15)
+        # print('Done sleeping for 15 secs. Just woke up!')
 
 
         train_dir = os.path.join(config.log_root, 'train_%d' % (int(time.time())))
@@ -54,7 +55,8 @@ class Train(object):
             'optimizer': self.optimizer.state_dict(),
             'current_loss': running_avg_loss
         }
-        model_save_path = os.path.join(self.model_dir, 'model_%d_%d' % (iter, int(time.time())))
+        model_save_path = os.path.join(self.model_dir, 'model_%06d_%.8f' % (iter, running_avg_loss))
+        # model_save_path = os.path.join(self.model_dir, 'model_%d_%d' % (iter, int(time.time())))
         torch.save(state, model_save_path)
 
     def setup_train(self, model_file_path=None):
@@ -132,6 +134,7 @@ class Train(object):
         while iter < n_iters:
             batch = self.batcher.next_batch()
             loss = self.train_one_batch(batch)
+            print('Loss for one batch at iter: ', loss, iter)
 
             running_avg_loss = calc_running_avg_loss(loss, running_avg_loss, self.summary_writer, iter)
             iter += 1
@@ -143,7 +146,7 @@ class Train(object):
                 print('steps %d, seconds for %d batch: %.2f , loss: %f' % (iter, print_interval,
                                                                            time.time() - start, loss))
                 start = time.time()
-            if iter % 5000 == 0:
+            if iter % 100 == 0: #5000
                 self.save_model(running_avg_loss, iter)
 
 if __name__ == '__main__':

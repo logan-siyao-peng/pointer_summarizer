@@ -1,3 +1,4 @@
+from __future__ import unicode_literals, print_function, division
 #Except for the pytorch part content of this file is copied from https://github.com/abisee/pointer-generator/blob/master/
 
 import os,sys,inspect
@@ -6,7 +7,6 @@ current_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentfra
 parent_dir = os.path.dirname(current_dir)
 sys.path.insert(0, parent_dir)
 
-from __future__ import unicode_literals, print_function, division
 
 
 reload(sys)
@@ -76,7 +76,7 @@ class BeamSearch(object):
         start = time.time()
         counter = 0
         batch = self.batcher.next_batch()
-        while batch is not None:
+        while batch is not None and counter <= 100: #  and counter <= 100
             # Run beam search to get best Hypothesis
             best_summary = self.beam_search(batch)
 
@@ -97,7 +97,7 @@ class BeamSearch(object):
             write_for_rouge(original_abstract_sents, decoded_words, counter,
                             self._rouge_ref_dir, self._rouge_dec_dir)
             counter += 1
-            if counter % 1000 == 0:
+            if counter % 10 == 0: #1000
                 print('%d example in %d sec'%(counter, time.time() - start))
                 start = time.time()
 
